@@ -1,3 +1,119 @@
+port com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Product {
+    private int id;
+    private String name;
+    private String description;
+    private double price;
+    private int stockQuantity;
+    private int orderQuantity;
+    private int orderId;
+
+    public Product(int id, String name, String description, double price, int stockQuantity) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.orderQuantity = 0;
+        this.orderId = 0;
+    }
+
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setOrderQuantity(int orderQuantity, int orderId) {
+        if (orderQuantity <= stockQuantity) {
+            this.orderQuantity = orderQuantity;
+            this.orderId = orderId;
+        } else {
+            System.out.println("Error: Not enough stock quantity");
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public int getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public static void main(String[] args) {
+        Product product1 = new Product(1, "Product 1", "Description for Product 1", 10.0, 100);
+        System.out.println(product1.toString());
+
+        product1.setOrderQuantity(50, 1);
+
+        System.out.println(product1.toString());
+    }
+}
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Product product1 = new Product(1, "Product 1", "Description for Product 1", 10.0, 100);
+        Product product2 = new Product(2, "Product 2", "Description for Product 2", 20.0, 50);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Available products:");
+        System.out.println(product1.getId() + ": " + product1.getName());
+        System.out.println(product2.getId() + ": " + product2.getName());
+
+        System.out.print("Enter product id: ");
+        int productId = scanner.nextInt();
+        System.out.print("Enter quantity: ");
+        int quantity = scanner.nextInt();
+
+        Product selectedProduct = null;
+        if (productId == product1.getId()) {
+            selectedProduct = product1;
+        } else if (productId == product2.getId()) {
+            selectedProduct = product2;
+        } else {
+            System.out.println("Error: Product not found");
+            return;
+        }
+
+        selectedProduct.setOrderQuantity(quantity, 1);
+
+        System.out.println("Order summary:");
+        System.out.println(selectedProduct.toString());
+    }
+}
+
+
+
+
 
 class ArrayBubble{
     private long[] a;   //ссылка на массив
