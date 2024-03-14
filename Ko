@@ -1,0 +1,59 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Food {
+    private int id;
+    private String name;
+    private String description;
+
+    public Food(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    // getters and setters
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Food> foods = new ArrayList<>();
+
+        // Добавление 100000 сущностей
+        for (int i = 0; i < 100000; i++) {
+            foods.add(new Food(i, "Food" + i, "Description" + i));
+        }
+
+        // Добавление 1 элемента в начало
+        foods.add(0, new Food(100001, "New Food at Beginning", "New Description at Beginning"));
+
+        // Добавление 1 элемента в середину
+        foods.add(foods.size() / 2, new Food(100002, "New Food at Middle", "New Description at Middle"));
+
+        // Добавление 1 элемента в конец
+        foods.add(new Food(100003, "New Food at End", "New Description at End"));
+
+        // Удаление 1 элемента
+        foods.remove(foods.size() / 2);
+
+        // Модификация 1 элемента в начале
+        Food foodAtBeginning = foods.get(0);
+        foodAtBeginning.setName("Modified Name at Beginning");
+        foodAtBeginning.setDescription("Modified Description at Beginning");
+
+        // Модификация 1 элемента в середине
+        Food foodAtMiddle = foods.get(foods.size() / 2);
+        foodAtMiddle.setName("Modified Name at Middle");
+        foodAtMiddle.setDescription("Modified Description at Middle");
+
+        // Модификация 1 элемента в конце
+        Food foodAtEnd = foods.get(foods.size() - 1);
+        foodAtEnd.setName("Modified Name at End");
+        foodAtEnd.setDescription("Modified Description at End");
+
+        // Вывод элементов
+        for (Food food : foods) {
+            System.out.println("Id: " + food.getId() + ", Name: " + food.getName() + ", Description: " + food.getDescription());
+        }
+    }
+}
