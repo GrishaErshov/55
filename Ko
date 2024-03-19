@@ -1,3 +1,26 @@
+                    break;
+                case 3:
+                    System.out.println("Выход из программы.");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Некорректный выбор, попробуйте снова.");
+            }
+        }
+    }
+
+    public long calculateDeltaTime(int harvestTime) {
+        long currentTime = Instant.now().toEpochMilli();
+        long harvestTimeInMillis = harvestTime * 24 * 60 * 60 * 1000;
+        return harvestTimeInMillis - currentTime;
+    }
+}
+
+
+
+
+
+/////////////
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
