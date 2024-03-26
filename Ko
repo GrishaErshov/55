@@ -4,6 +4,97 @@ public Plane(int id, String name, int yearProd) {
     this.yearProd = yearProd;
 }
 
+@Override
+public String toString() {
+    return "Plane{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", yearProd=" + yearProd +
+            '}';
+}
+    while (planes.size() < 100) {
+        int id = planes.size() + 1;
+        System.out.print("Enter name of the plane: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter year of production of the plane: ");
+        int yearProd = Integer.parseInt(scanner.nextLine());
+
+        planes.add(new Plane(id, name, yearProd));
+    }
+
+    int option = 0;
+    do {
+        System.out.println("Menu:");
+        System.out.println("1) Serted name");
+        System.out.println("2) Serted yearProd");
+        System.out.println("3) Filter name");
+        System.out.println("4) Filter yearProd");
+        System.out.println("5) Filter by year production count");
+
+        System.out.print("Enter option: ");
+        option = Integer.parseInt(scanner.nextLine());
+
+        switch (option) {
+            case 1:
+                System.out.print("Enter name to search: ");
+                String name = scanner.nextLine();
+                for (Plane plane : planes) {
+                    if (plane.name.equals(name)) {
+                        System.out.println(plane);
+                    }
+                }
+                break;
+            case 2:
+                System.out.print("Enter year of production to search: ");
+                int yearProd = Integer.parseInt(scanner.nextLine());
+                for (Plane plane : planes) {
+                    if (plane.yearProd == yearProd) {
+                        System.out.println(plane);
+                    }
+                }
+                break;
+            case 3:
+                System.out.print("Enter name to filter: ");
+                String filterName = scanner.nextLine();
+                planes.stream()
+                      .filter(plane -> plane.name.equals(filterName))
+                      .forEach(System.out::println);
+                break;
+            case 4:
+                System.out.print("Enter year of production to filter: ");
+                int filterYear = Integer.parseInt(scanner.nextLine());
+                planes.stream()
+                      .filter(plane -> plane.yearProd == filterYear)
+                      .forEach(System.out::println);
+                break;
+            case 5:
+                System.out.print("Enter year of production to count: ");
+                int countYear = Integer.parseInt(scanner.nextLine());
+                long count = planes.stream()
+                                   .filter(plane -> plane.yearProd == countYear)
+                                   .count();
+                System.out.println("Count of planes with year of production " + countYear + ": " + count);
+                break;
+            default:
+                System.out.println("Invalid option");
+        }
+    } while (option != 0);
+}
+
+
+
+
+
+
+
+////////////////
+
+public Plane(int id, String name, int yearProd) {
+    this.id = id;
+    this.name = name;
+    this.yearProd = yearProd;
+}
+
 public String getName() {
     return name;
 }
