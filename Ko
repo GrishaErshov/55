@@ -1,3 +1,102 @@
+public Plane(int id, String name, int yearProd) {
+    this.id = id;
+    this.name = name;
+    this.yearProd = yearProd;
+}
+
+public String getName() {
+    return name;
+}
+
+public int getYearProd() {
+    return yearProd;
+}
+
+@Override
+public String toString() {
+    return "Plane{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", yearProd=" + yearProd +
+            '}';
+}
+    // Добавляем 100 экземпляров Plane в HashSet
+    for (int i = 1; i <= 100; i++) {
+        planes.add(new Plane(i, "Plane" + i, 2000 + i));
+    }
+
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Меню:");
+    System.out.println("1) Введите имя, чтобы вывести на экран");
+    System.out.println("2) Введите год производства, чтобы вывести на экран");
+    System.out.println("3) Введите название, чтобы отфильтровать и вывести на экран");
+    System.out.println("4) Введите год производства, чтобы отфильтровать и вывести на экран");
+    System.out.println("5) Введите год производства, чтобы посчитать и вывести количество");
+
+    int choice = scanner.nextInt();
+
+    switch (choice) {
+        case 1:
+            System.out.println("Введите имя:");
+            String inputName = scanner.next();
+            for (Plane plane : planes) {
+                if (plane.getName().equals(inputName)) {
+                    System.out.println(plane);
+                }
+            }
+            break;
+        case 2:
+            System.out.println("Введите год производства:");
+            int inputYear = scanner.nextInt();
+            for (Plane plane : planes) {
+                if (plane.getYearProd() == inputYear) {
+                    System.out.println(plane);
+                }
+            }
+            break;
+        case 3:
+            System.out.println("Введите название для фильтрации:");
+            String nameFilter = scanner.next();
+            planes.stream()
+                    .filter(plane -> plane.getName().contains(nameFilter))
+                    .forEach(System.out::println);
+            break;
+        case 4:
+            System.out.println("Введите год производства для фильтрации:");
+            int yearFilter = scanner.nextInt();
+            planes.stream()
+                    .filter(plane -> plane.getYearProd() == yearFilter)
+                    .forEach(System.out::println);
+            break;
+        case 5:
+            System.out.println("Введите год производства для подсчета количества:");
+            int yearCount = scanner.nextInt();
+            long count = planes.stream()
+                    .filter(plane -> plane.getYearProd() == yearCount)
+                    .count();
+            System.out.println("Количество самолетов с годом производства " + yearCount + ": " + count);
+            break;
+        default:
+            System.out.println("Некорректный ввод");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.Instant;
