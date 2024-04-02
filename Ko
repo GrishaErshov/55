@@ -1,3 +1,99 @@
+private static char[][] board = new char[3][3];
+private static char currentPlayer = 'X';
+private static int moveCounter = 0;
+
+public static void main(String[] args) {
+    initializeBoard();
+    printBoard();
+    
+    while (true) {
+        makeMove();
+        printBoard();
+        
+        if (checkWin()) {
+            System.out.println("Player " + currentPlayer + " wins!");
+            break;
+        }
+        
+        if (moveCounter == 9) {
+            System.out.println("It's a tie!");
+            break;
+        }
+        
+        changePlayer();
+    }
+}
+
+public static void initializeBoard() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = '-';
+        }
+    }
+}
+
+public static void printBoard() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            System.out.print(board[i][j] + " ");
+        }
+        System.out.println();
+    }
+}
+
+public static void makeMove() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Player " + currentPlayer + ", enter row (0-2) and column (0-2) to make your move:");
+    int row = scanner.nextInt();
+    int col = scanner.nextInt();
+    
+    if (row < 0 || row > 2 || col < 0 || col > 2 || board[row][col] != '-') {
+        System.out.println("Invalid move. Try again.");
+        makeMove();
+    } else {
+        board[row][col] = currentPlayer;
+        moveCounter++;
+    }
+}
+
+public static boolean checkWin() {
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) {
+            return true;
+        }
+        if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer) {
+            return true;
+        }
+    }
+    
+    if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) {
+        return true;
+    }
+    if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer) {
+        return true;
+    }
+    
+    return false;
+}
+
+public static void changePlayer() {
+    if (currentPlayer == 'X') {
+        currentPlayer = 'O';
+    } else {
+        currentPlayer = 'X';
+    }
+}
+
+
+
+
+
+
+
+
+
+
+//////////
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
