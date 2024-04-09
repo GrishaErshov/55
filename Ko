@@ -1,3 +1,89 @@
+public class MediaPlayer {
+    private boolean isPlaying;
+    private boolean isPaused;
+    private int songLength;
+    private int currentPosition;
+
+    public MediaPlayer() {
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.songLength = 0;
+        this.currentPosition = 0;
+    }
+
+    public void playSong(String songName) {
+        // загрузка и воспроизведение песни
+        System.out.println("Playing: " + songName);
+        isPlaying = true;
+        isPaused = false;
+    }
+
+    public void pauseSong() {
+        // постановка на паузу
+        if (isPlaying) {
+            System.out.println("Pausing the song");
+            isPlaying = false;
+            isPaused = true;
+        } else {
+            System.out.println("No song is currently playing");
+        }
+    }
+
+    public void stopSong() {
+        // остановка песни
+        if (isPlaying || isPaused) {
+            System.out.println("Stopping the song");
+            isPlaying = false;
+            isPaused = false;
+            currentPosition = 0;
+        } else {
+            System.out.println("No song is currently playing");
+        }
+    }
+
+    public void rewindSong(int seconds) {
+        // перемотка на указанное количество секунд
+        if (isPlaying || isPaused) {
+            System.out.println("Rewinding the song by " + seconds + " seconds");
+            currentPosition -= seconds;
+            if (currentPosition < 0) {
+                currentPosition = 0;
+            }
+        } else {
+            System.out.println("No song is currently playing");
+        }
+    }
+
+    public void fastForwardSong(int seconds) {
+        // перемотка вперед на указанное количество секунд
+        if (isPlaying || isPaused) {
+            System.out.println("Fast forwarding the song by " + seconds + " seconds");
+            currentPosition += seconds;
+            if (currentPosition > songLength) {
+                currentPosition = songLength;
+            }
+        } else {
+            System.out.println("No song is currently playing");
+        }
+    }
+    
+    public static void main(String[] args) {
+        MediaPlayer player = new MediaPlayer();
+        player.playSong("Song1");
+        player.pauseSong();
+        player.rewindSong(10);
+        player.playSong("Song2");
+        player.fastForwardSong(20);
+        player.stopSong();
+    }
+}
+
+
+
+
+
+
+///////////////
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
