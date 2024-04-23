@@ -1,5 +1,48 @@
 import java.util.Scanner
 
+fun main() {
+    val scanner = Scanner(System.`in`)
+    print("Enter a 6-digit number: ")
+    val number = scanner.next()
+
+    if (number.length != 6) {
+        println("The number must be exactly 6 digits.")
+        return
+    }
+
+    val sumFirstThreeDigits = Character.getNumericValue(number[0]) + Character.getNumericValue(number[1]) + Character.getNumericValue(number[2])
+    val sumLastThreeDigits = Character.getNumericValue(number[3]) + Character.getNumericValue(number[4]) + Character.getNumericValue(number[5])
+
+    if (sumFirstThreeDigits == sumLastThreeDigits) {
+        println("The ticket is lucky!")
+    } else {
+        var nextLuckyNumber = findNextLuckyNumber(number.toInt())
+        while (!isLucky(nextLuckyNumber.toString())) {
+            nextLuckyNumber++
+        }
+        println("The nearest lucky ticket number is: $nextLuckyNumber")
+    }
+}
+
+fun isLucky(number: String): Boolean {
+    val sumFirstThreeDigits = Character.getNumericValue(number[0]) + Character.getNumericValue(number[1]) + Character.getNumericValue(number[2])
+    val sumLastThreeDigits = Character.getNumericValue(number[3]) + Character.getNumericValue(number[4]) + Character.getNumericValue(number[5])
+    return sumFirstThreeDigits == sumLastThreeDigits
+}
+
+fun findNextLuckyNumber(number: Int): Int {
+    var nextNumber = number + 1
+    while (nextNumber.toString().length < 6) {
+        nextNumber *= 10
+    }
+    return nextNumber
+}
+
+
+
+
+import java.util.Scanner
+
 fun main(args: Array<String>) {
     val scanner = Scanner(System.`in`)
     
