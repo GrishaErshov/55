@@ -1,3 +1,59 @@
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    checkButton.setOnClickListener {
+        val number = numberInput.text.toString()
+        
+        if (number.length != 6) {
+            resultView.text = "Please enter a 6-digit number"
+        } else {
+            val firstHalf = number.substring(0, 3).sumBy { it.toString().toInt() }
+            val secondHalf = number.substring(3, 6).sumBy { it.toString().toInt() }
+            
+            if (firstHalf == secondHalf) {
+                resultView.text = "This is a lucky ticket!"
+            } else {
+                var nextNumber = number.toInt() + 1
+                while (nextNumber.toString().sumBy { it.toString().toInt() } != firstHalf) {
+                    nextNumber++
+                }
+                resultView.text = "Closest lucky ticket: $nextNumber"
+            }
+        }
+    }
+}
+
+
+
+
+<EditText
+    android:id="@+id/numberInput"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Enter a 6-digit number"
+    android:inputType="number"/>
+
+<Button
+    android:id="@+id/checkButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/numberInput"
+    android:text="Check"/>
+
+<TextView
+    android:id="@+id/resultView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/checkButton"
+    android:layout_centerHorizontal="true"/>
+
+
+
+
+
+
+
 fun main() {
     println("Введите 6-значный номер билета:")
     val input = readLine()
