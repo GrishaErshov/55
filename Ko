@@ -1,3 +1,36 @@
+if (number != null && number.toString().length == 6) {
+    val sumFirstThree = number / 100000 + number / 10000 % 10 + number / 1000 % 10
+    val sumLastThree = number / 100 % 10 + number / 10 % 10 + number % 10
+
+    if (sumFirstThree == sumLastThree) {
+        println("Билет счастливый")
+    } else {
+        var nextTicket = number + 1
+        var sumNextFirstThree =
+            nextTicket / 100000 + nextTicket / 10000 % 10 + nextTicket / 1000 % 10
+        var sumNextLastThree =
+            nextTicket / 100 % 10 + nextTicket / 10 % 10 + nextTicket % 10
+
+        while (sumNextFirstThree != sumNextLastThree) {
+            nextTicket++
+            sumNextFirstThree =
+                nextTicket / 100000 + nextTicket / 10000 % 10 + nextTicket / 1000 % 10
+            sumNextLastThree =
+                nextTicket / 100 % 10 + nextTicket / 10 % 10 + nextTicket % 10
+        }
+
+        println("Ближайший счастливый билет: $nextTicket")
+    }
+} else {
+    println("Пожалуйста, введите корректное 6-значное число")
+}
+
+
+
+
+
+
+
 ```kotlin
 fun isLuckyTicket(numbers: List<Int>): Boolean {
     val firstThreeSum = numbers.subList(0, 3).sum()
