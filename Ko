@@ -1,3 +1,42 @@
+```kotlin
+fun isLuckyTicket(numbers: List<Int>): Boolean {
+    val firstThreeSum = numbers.subList(0, 3).sum()
+    val lastThreeSum = numbers.subList(3, 6).sum()
+    return firstThreeSum == lastThreeSum
+}
+
+fun findNextLuckyTicket(numbers: MutableList<Int>): Int {
+    var ticket = numbers.joinToString("").toInt()
+    
+    while (!isLuckyTicket(numbers)) {
+        ticket++
+        numbers.clear()
+        ticket.toString().toCharArray().map { it.toString().toInt() }.toCollection(numbers)
+    }
+    
+    return ticket
+}
+
+fun main() {
+    val numbers = mutableListOf<Int>()
+    repeat(6) {
+        print("Введите число: ")
+        val number = readLine()!!.toInt()
+        numbers.add(number)
+    }
+    
+    if (isLuckyTicket(numbers)) {
+        println("Билет счастливый!")
+    } else {
+        val nextLuckyTicket = findNextLuckyTicket(numbers)
+        println("Билет не счастливый. Следующий ближайший счастливый билет: $nextLuckyTicket")
+    }
+}
+
+
+
+
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
