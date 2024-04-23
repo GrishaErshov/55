@@ -1,3 +1,37 @@
+import java.util.Scanner
+
+fun main(args: Array<String>) {
+    val scanner = Scanner(System.`in`)
+    
+
+    print("Введите шестизначное число: ")
+    var number = scanner.nextLine()
+    
+    while (number.length != 6 || !number.all { it.isDigit() }) {
+        print("Пожалуйста, введите корректное шестизначное число: ")
+        number = scanner.nextLine()
+    }
+    
+    val sumFirstThreeDigits = number.substring(0, 3).sumBy { it.toString().toInt() }
+    val sumLastThreeDigits = number.substring(3).sumBy { it.toString().toInt() }
+    
+    if (sumFirstThreeDigits == sumLastThreeDigits) {
+        println("Bilet chastlivi")
+    } else {
+        var newNumber = number.toInt() + 1
+        while (newNumber.toString().substring(0, 3).sumBy { it.toString().toInt() } !=
+               newNumber.toString().substring(3).sumBy { it.toString().toInt() }) {
+            newNumber++
+        }
+        println("Ближайшее шестизначное число: $newNumber")
+    }
+}
+
+
+
+
+
+
 <LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
