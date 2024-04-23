@@ -1,3 +1,77 @@
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/ticketNumberInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Введите номер билета"/>
+
+    <Button
+        android:id="@+id/checkTicketButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Проверить билет"/>
+
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Результат: "
+        android:textSize="18sp"/>
+
+</LinearLayout>
+
+
+import java.util.Scanner
+
+fun main() {
+    val scanner = Scanner(System.`in`)
+    
+    println("Введите 6-значный номер билета:")
+    val ticketNumber = scanner.next()
+    
+    if (ticketNumber.length != 6) {
+        println("Некорректный номер билета")
+        return
+    }
+    
+    val firstPart = ticketNumber.substring(0, 3)
+    val secondPart = ticketNumber.substring(3)
+    
+    val sumOfFirstPart = firstPart.map { it.toString().toInt() }.sum()
+    val sumOfSecondPart = secondPart.map { it.toString().toInt() }.sum()
+    
+    if (sumOfFirstPart == sumOfSecondPart) {
+        println("Билет счастливый!")
+    } else {
+        val nextLuckyTicket = findNextLuckyTicket(ticketNumber.toInt())
+        println("Ближайший счастливый билет: $nextLuckyTicket")
+    }
+}
+
+fun findNextLuckyTicket(ticket: Int): Int {
+    var nextTicket = ticket + 1
+    while (true) {
+        val firstPart = nextTicket.toString().substring(0, 3)
+        val secondPart = nextTicket.toString().substring(3)
+        val sumOfFirstPart = firstPart.map { it.toString().toInt() }.sum()
+        val sumOfSecondPart = secondPart.map { it.toString().toInt() }.sum()
+        if (sumOfFirstPart == sumOfSecondPart) {
+            return nextTicket
+        }
+        nextTicket++
+    }
+}
+
+
+
+
+
+
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
