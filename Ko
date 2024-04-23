@@ -1,3 +1,38 @@
+fun main() {
+    println("Введите 6-значный номер билета:")
+    val input = readLine()
+    
+    if (input != null && input.length == 6 && input.all { it.isDigit() }) {
+        val ticketNumber = input.toInt()
+
+        val firstThreeDigitsSum = ticketNumber / 1000 % 10 + ticketNumber / 100 % 10 + ticketNumber / 10 % 10
+        val lastThreeDigitsSum = ticketNumber / 100000 % 10 + ticketNumber / 10000 % 10 + ticketNumber / 1000 % 10
+
+        if (firstThreeDigitsSum == lastThreeDigitsSum) {
+            println("Билет счастливый!")
+        } else {
+            var nextTicketNumber = ticketNumber + 1
+            while (true) {
+                val nextFirstThreeDigitsSum = nextTicketNumber / 1000 % 10 + nextTicketNumber / 100 % 10 + nextTicketNumber / 10 % 10
+                val nextLastThreeDigitsSum = nextTicketNumber / 100000 % 10 + nextTicketNumber / 10000 % 10 + nextTicketNumber / 1000 % 10
+
+                if (nextFirstThreeDigitsSum == nextLastThreeDigitsSum) {
+                    println("Ближайший счастливый билет: $nextTicketNumber")
+                    break
+                }
+
+                nextTicketNumber++
+            }
+        }
+    } else {
+        println("Некорректный ввод. Пожалуйста, введите 6-значный номер.")
+    }
+}
+
+
+
+
+
 if (number != null && number.toString().length == 6) {
     val sumFirstThree = number / 100000 + number / 10000 % 10 + number / 1000 % 10
     val sumLastThree = number / 100 % 10 + number / 10 % 10 + number % 10
