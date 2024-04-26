@@ -1,6 +1,43 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        String fileName = "numbers.txt"; // Файл с числами
+
+        List<Integer> numbers = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                numbers.add(Integer.parseInt(line.trim()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int unethicalCount = 0;
+        for (int i = 0; i < numbers.size() - 2; i++) {
+            if ((numbers.get(i) % 10000 >= 1000 && numbers.get(i + 1) % 10000 >= 1000)
+                    || (numbers.get(i + 1) % 10000 >= 1000 && numbers.get(i + 2) % 10000 >= 1000)
+                    || (numbers.get(i) % 10000 >= 1000 && numbers.get(i + 2) % 10000 >= 1000)
+                    || (numbers.get(i) + numbers.get(i + 1) + numbers.get(i + 2) < numbers.stream().max(Integer::compareTo).filter(num -> num % 100 == 42).orElse(0))) {
+                unethicalCount++;
+            }
+        }
+
+        System.out.println("Количество неэтичных реплик: " + unethicalCount);
+    }
+}
+
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
 
