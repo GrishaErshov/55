@@ -1,3 +1,56 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("numbers.txt"));
+            String line;
+            int[] sequence = new int[2031];
+            int index = 0;
+
+            while ((line = reader.readLine()) != null) {
+                sequence[index] = Integer.parseInt(line);
+                index++;
+            }
+            reader.close();
+
+            int maxEnding42 = 0;
+            for (int num : sequence) {
+                if (num % 100 == 42 && num > maxEnding42) {
+                    maxEnding42 = num;
+                }
+            }
+
+            for (int i = 0; i < 2029; i++) {
+                int num1 = sequence[i];
+                int num2 = sequence[i + 1];
+                int num3 = sequence[i + 2];
+
+                if ((isFourDigit(num1) && isFourDigit(num2) && !isFourDigit(num3)) ||
+                    (!isFourDigit(num1) && isFourDigit(num2) && isFourDigit(num3)) ||
+                    (isFourDigit(num1) && !isFourDigit(num2) && isFourDigit(num3)) ||
+                    (num1 + num2 + num3 < maxEnding42)) {
+                    System.out.println(num1 + ", " + num2 + ", " + num3);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isFourDigit(int number) {
+        return number >= 1000 && number <= 9999;
+    }
+}
+
+
+
+
+
 public static void main(String[] args) {
 int count = 0;
 int maxNumber = Integer.MIN_VALUE;
