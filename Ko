@@ -1,3 +1,30 @@
+public static void main(String[] args) {
+int count = 0;
+int maxNumber = Integer.MIN_VALUE;
+    for (int i = 1000; i < 30000; i++) {
+        if (checkMask(i) && (i % 7 == 0 || i % 13 == 0)) {
+            count++;
+            maxNumber = Math.max(maxNumber, i);
+        }
+    }
+
+    System.out.println(count + "_" + maxNumber);
+}
+
+public static boolean checkMask(int number) {
+    String str = String.valueOf(number);
+    return str.length() == 5 &&
+            str.charAt(0) == '1' &&
+            str.charAt(4) == '9' &&
+            str.charAt(2) == '7';
+}
+
+
+
+
+
+
+
 import java.util.Scanner
 
 fun main() {
