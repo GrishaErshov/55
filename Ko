@@ -5,6 +5,58 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
+        String filename = "numbers.txt";
+        int unethicalReplies = 0;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+
+            String line;
+            int[] numbers = new int[3];
+            int count = 0;
+
+            while ((line = reader.readLine()) != null) {
+                numbers[count % 3] = Integer.parseInt(line);
+
+                if (count >= 2) {
+                    if ((numbers[0] >= 1000 && numbers[0] <= 9999 && numbers[1] >= 1000 && numbers[1] <= 9999) ||
+                            (numbers[1] >= 1000 && numbers[1] <= 9999 && numbers[2] >= 1000 && numbers[2] <= 9999) ||
+                            (numbers[0] >= 1000 && numbers[0] <= 9999 && numbers[2] >= 1000 && numbers[2] <= 9999) ||
+                            (numbers[0] + numbers[1] + numbers[2] < getMaxNumberEndingIn42())) {
+                        unethicalReplies++;
+                    }
+                }
+
+                count++;
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(unethicalReplies);
+    }
+
+    private static int getMaxNumberEndingIn42() {
+        String maxNumber = "100000042";
+        return Integer.parseInt(maxNumber);
+    }
+}
+
+
+
+
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+
+    public static void main(String[] args) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("numbers.txt"));
             String line;
