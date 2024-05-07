@@ -1,3 +1,119 @@
+kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var editTexts: Array<EditText>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        editTexts = arrayOf(
+            findViewById(R.id.editText1),
+            findViewById(R.id.editText2),
+            findViewById(R.id.editText3),
+            findViewById(R.id.editText4),
+            findViewById(R.id.editText5)
+        )
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            val intent = Intent(this, DisplayActivity::class.java)
+            val jsonData = createJsonData()
+            intent.putExtra("jsonData", jsonData)
+            startActivity(intent)
+        }
+    }
+
+    private fun createJsonData(): String {
+        val jsonObject = JSONObject()
+        for (i in 1..5) {
+            val key = "param$i"
+            val value = editTexts[i - 1].text.toString()
+            jsonObject.put(key, value)
+        }
+        return jsonObject.toString()
+    }
+}
+
+## Разметка (activity_main.xml)
+
+xml
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!— Добавьте еще 4 EditText, а также кнопку —>
+    
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Перейти к результатам" />
+</LinearLayout>
+
+## Второй экран (DisplayActivity)
+
+kotlin
+class DisplayActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_display)
+
+        val jsonData = intent.getStringExtra("jsonData")
+        val textView = findViewById<TextView>(R.id.textView)
+        textView.text = jsonData
+
+        val backButton = findViewById<Button>(R.id.backButton)
+        backButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            try {
+                val jsonObject = JSONObject(jsonData!!)
+                for (i in 1..5) {
+                    val key = "param$i"
+                    val value = jsonObject.getString(key)
+                    (findViewById<EditText>(resources.getIdentifier("editText$i", "id", packageName))).setText(value)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            startActivity(intent)
+        }
+    }
+}
+
+## Разметка (activity_display.xml)
+
+xml
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+:text="Вернуться к вводу" />
+</LinearLayout>
+
+
+
+
+
+
 // В первой активности
 val button: Button = findViewById(R.id.button)
 button.setOnClickListener {
