@@ -1,3 +1,61 @@
+// В первой активности
+val button: Button = findViewById(R.id.button)
+button.setOnClickListener {
+    // Создание JSON файла
+    val jsonObject = JSONObject()
+    jsonObject.put("param1", editText1.text.toString())
+    jsonObject.put("param2", editText2.text.toString())
+    // ...
+    
+    val jsonString = jsonObject.toString()
+    
+    val fileOutputStream: FileOutputStream
+    try {
+        fileOutputStream = openFileOutput("data.json", Context.MODE_PRIVATE)
+        fileOutputStream.write(jsonString.toByteArray())
+        fileOutputStream.close()
+        
+        val intent = Intent(this, SecondActivity::class.java)
+        startActivity(intent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+
+
+// Во второй активности
+val fileInputStream: FileInputStream
+try {
+    fileInputStream = openFileInput("data.json")
+    val inputStreamReader = InputStreamReader(fileInputStream)
+    val bufferedReader = BufferedReader(inputStreamReader)
+    val stringBuilder = StringBuilder()
+    var line: String?
+    
+    while (bufferedReader.readLine().also { line = it } != null) {
+        stringBuilder.append(line)
+    }
+    
+    val jsonObject = JSONObject(stringBuilder.toString())
+    val parameter1 = jsonObject.getString("param1")
+    val parameter2 = jsonObject.getString("param2")
+    // ...
+    
+    // Отобразить данные в TextView
+    textView.text = "Param1: $parameter1\nParam2: $parameter2"
+} catch (e: Exception) {
+    e.printStackTrace()
+}
+
+
+
+
+
+
+
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
