@@ -42,6 +42,107 @@ public class TouristBusApp {
         Scanner scanner = new Scanner(System.in); // Scanner for input
 
         // Input the number of people for the first bus
+        int peopleBus1 = inputNumber(scanner, "Enter the number of people for the first bus: ");
+
+        // Input the number of people for the second bus
+        int peopleBus2 = inputNumber(scanner, "Enter the number of people for the second bus: ");
+
+        // Book seats and get the price
+        int price1 = bus1.bookSeats(peopleBus1);
+        int price2 = bus2.bookSeats(peopleBus2);
+
+        // Output information about the first bus
+        if (price1 != -1) {
+            System.out.println("Available seats on the first bus: " + bus1.availableSeats());
+            System.out.println("Total cost for the first group: " + price1 + " rubles");
+        } else {
+            System.out.println("Not enough seats on the first bus.");
+        }
+
+        // Output information about the second bus
+        if (price2 != -1) {
+            System.out.println("Available seats on the second bus: " + bus2.availableSeats());
+            System.out.println("Total cost for the second group: " + price2 + " rubles");
+        } else {
+            System.out.println("Not enough seats on the second bus.");
+        }
+
+        scanner.close(); // Close the scanner
+    }
+
+    // Method to input a number and handle invalid input
+    private static int inputNumber(Scanner scanner, String prompt) {
+        int number = 0;
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.print(prompt);
+            if (scanner.hasNextInt()) {
+                number = scanner.nextInt();
+                if (number > 0) {
+                    validInput = true; // Valid input received
+                } else {
+                    System.out.println("Please enter a positive number!");
+                }
+            } else {
+                System.out.println("Введите число!"); // Message for non-numeric input
+                scanner.next(); // Clear the invalid input
+            }
+        }
+        return number;
+    }
+}
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+class Bus {
+    private int totalSeats;      // Total number of seats
+    private int occupiedSeats;   // Occupied seats
+    private int pricePerSeat;    // Price per seat
+
+    // Constructor for the Bus class
+    public Bus(int totalSeats, int pricePerSeat) {
+        this.totalSeats = totalSeats;
+        this.pricePerSeat = pricePerSeat;
+        this.occupiedSeats = 0;   // Initially, all seats are available
+    }
+
+    // Method to book seats
+    public int bookSeats(int numberOfPeople) {
+        if (numberOfPeople <= availableSeats()) {
+            occupiedSeats += numberOfPeople; // Increment occupied seats
+            return priceForGroup(numberOfPeople); // Return total price
+        } else {
+            return -1; // Booking failed due to insufficient seats
+        }
+    }
+
+    // Method to get the number of available seats
+    public int availableSeats() {
+        return totalSeats - occupiedSeats; // Return the number of free seats
+    }
+
+    // Method to calculate the price for a group
+    public int priceForGroup(int numberOfPeople) {
+        return numberOfPeople * pricePerSeat; // Total cost
+    }
+}
+
+public class TouristBusApp {
+    public static void main(String[] args) {
+        // Create two TouristBus objects
+        Bus bus1 = new Bus(50, 500); // 50 seats, 500 per seat
+        Bus bus2 = new Bus(50, 600); // 50 seats, 600 per seat
+
+        Scanner scanner = new Scanner(System.in); // Scanner for input
+
+        // Input the number of people for the first bus
         System.out.print("Enter the number of people for the first bus: ");
         int peopleBus1 = scanner.nextInt();
 
