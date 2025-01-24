@@ -1,67 +1,138 @@
-import java.util.Scanner;
+class TouristBus:
+    def __init__(self, capacity, price_per_seat):
+        self.capacity = capacity
+        self.available_seats = capacity
+        self.price_per_seat = price_per_seat
 
-class Bus {
-    private int totalSeats;
-    private int occupiedSeats;
-    private int pricePerSeat;
+    def book_seats(self, num_people):
+        if num_people <= self.available_seats:
+            self.available_seats -= num_people
+            return True
+        else:
+            print(f"Недостаточно мест в автобусе. Доступно: {self.available_seats} мест.")
+            return False
 
-    public Bus(int totalSeats, int pricePerSeat) {
-        this.totalSeats = totalSeats;
+    def calculate_trip_cost(self, num_people):
+         if num_people <= self.capacity - self.available_seats:
+            return num_people * self.price_per_seat
+         else:
+             return 0 # возвращаем 0, если мест в автобусе меньше, чем требуется
+
+# Создаем два объекта "Туристический автобус"
+bus1 = TouristBus(50, 500)  # 50 мест, цена за место 500
+bus2 = TouristBus(40, 600)  # 40 мест, цена за место 600
+
+# Запрос кол-ва людей для каждого автобуса
+try:
+    num_people_bus1 = int(input("Введите количество людей для первого автобуса: "))
+    num_people_bus2 = int(input("Введите количество людей для второго автобуса: "))
+except ValueError:
+    print("Ошибка: Введите целое число.")
+    exit()
+
+# Бронирование мест
+bus1_booked = bus1.book_seats(num_people_bus1)
+bus2_booked = bus2.book_seats(num_people_bus2)
+
+
+# Вывод информации
+
+if bus1_booked:
+    trip_cost_bus1 = bus1.calculate_trip_cost(num_people_bus1)
+    print(f"\nПервый автобус:")
+    print(f"Осталось свободных мест: {bus1.available_seats}")
+    print(f"Стоимость поездки: {trip_cost_bus1} руб.")
+
+if bus2_booked:
+    trip_cost_bus2 = bus2.calculate_trip_cost(num_people_bus2)
+    print(f"\nВторой автобус:")
+    print(f"Осталось свободных мест: {bus2.available_seats}")
+    print(f"Стоимость поездки: {trip_cost_bus2} руб.")
+
+
+
+
+
+public class TouristBus {
+    private int numberOfSeats;          // Количество мест
+    private double pricePerSeat;        // Стоимость одного места
+    private int occupiedSeats;          // Количество занятых мест
+
+    // Конструктор по умолчанию
+    public TouristBus() {
+        this.numberOfSeats = 50;       // Предполагаем 50 мест по умолчанию
+        this.pricePerSeat = 100.0;     // Предполагаем стоимость 100
+        this.occupiedSeats = 0;         // Изначально автобус пуст
+    }
+
+    // Конструктор с параметрами
+    public TouristBus(int numberOfSeats, double pricePerSeat) {
+        this.numberOfSeats = numberOfSeats;
         this.pricePerSeat = pricePerSeat;
-        this.occupiedSeats = 0;
+        this.occupiedSeats = 0;         // Изначально автобус пуст
     }
 
-    public int bookSeats(int numberOfPeople) {
-        if (numberOfPeople <= availableSeats()) {
-            occupiedSeats += numberOfPeople;
-            return priceForGroup(numberOfPeople);
+    // Конструктор копирования
+    public TouristBus(TouristBus bus) {
+        this.numberOfSeats = bus.numberOfSeats;
+        this.pricePerSeat = bus.pricePerSeat;
+        this.occupiedSeats = bus.occupiedSeats;
+    }
+
+    // Метод для изменения количества занятых мест
+    public void bookSeats(int seats) {
+        if (occupiedSeats + seats <= numberOfSeats) {
+            occupiedSeats += seats;
         } else {
-            return -1; // Не удалось забронировать места
+            System.out.println("Недостаточно свободных мест.");
         }
     }
 
-    public int availableSeats() {
-        return totalSeats - occupiedSeats;
+    // Метод для получения количества свободных мест
+    public int getAvailableSeats() {
+        return numberOfSeats - occupiedSeats;
     }
 
-    public int priceForGroup(int numberOfPeople) {
-        return numberOfPeople * pricePerSeat;
+    // Метод для проверки, пуст автобус или заполнен
+    public boolean isEmpty() {
+        return occupiedSeats == 0;
+    }
+
+    public boolean isFull() {
+        return occupiedSeats == numberOfSeats;
+    }
+
+    // Метод для расчета общей стоимости занятых мест
+    public double calculateTotalOccupiedCost() {
+        return occupiedSeats * pricePerSeat;
+    }
+
+    // Геттеры и сеттеры
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public double getPricePerSeat() {
+        return pricePerSeat;
+    }
+
+    public void setPricePerSeat(double pricePerSeat) {
+        this.pricePerSeat = pricePerSeat;
+    }
+
+    public int getOccupiedSeats() {
+        return occupiedSeats;
     }
 }
 
-public class TouristBusApp {
-    public static void main(String[] args) {
-        Bus bus1 = new Bus(50, 500);
-        Bus bus2 = new Bus(50, 600);
-        
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("Введите количество людей для первого автобуса: ");
-        int peopleBus1 = scanner.nextInt();
-        
-        System.out.print("Введите количество людей для второго автобуса: ");
-        int peopleBus2 = scanner.nextInt();
-        
-        int price1 = bus1.bookSeats(peopleBus1);
-        int price2 = bus2.bookSeats(peopleBus2);
-        
-        if (price1 != -1) {
-            System.out.println("Свободные места в первом автобусе: " + bus1.availableSeats());
-            System.out.println("Цена за поездку для первой группы: " + price1 + " рублей");
-        } else {
-            System.out.println("Недостаточно мест в первом автобусе.");
-        }
 
-        if (price2 != -1) {
-            System.out.println("Свободные места во втором автобусе: " + bus2.availableSeats());
-            System.out.println("Цена за поездку для второй группы: " + price2 + " рублей");
-        } else {
-            System.out.println("Недостаточно мест во втором автобусе.");
-        }
 
-        scanner.close();
-    }
-}
+
+
 
 
 
