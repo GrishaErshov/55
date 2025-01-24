@@ -1,3 +1,71 @@
+import java.util.Scanner;
+
+class Bus {
+    private int totalSeats;
+    private int occupiedSeats;
+    private int pricePerSeat;
+
+    public Bus(int totalSeats, int pricePerSeat) {
+        this.totalSeats = totalSeats;
+        this.pricePerSeat = pricePerSeat;
+        this.occupiedSeats = 0;
+    }
+
+    public int bookSeats(int numberOfPeople) {
+        if (numberOfPeople <= availableSeats()) {
+            occupiedSeats += numberOfPeople;
+            return priceForGroup(numberOfPeople);
+        } else {
+            return -1; // Не удалось забронировать места
+        }
+    }
+
+    public int availableSeats() {
+        return totalSeats - occupiedSeats;
+    }
+
+    public int priceForGroup(int numberOfPeople) {
+        return numberOfPeople * pricePerSeat;
+    }
+}
+
+public class TouristBusApp {
+    public static void main(String[] args) {
+        Bus bus1 = new Bus(50, 500);
+        Bus bus2 = new Bus(50, 600);
+        
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Введите количество людей для первого автобуса: ");
+        int peopleBus1 = scanner.nextInt();
+        
+        System.out.print("Введите количество людей для второго автобуса: ");
+        int peopleBus2 = scanner.nextInt();
+        
+        int price1 = bus1.bookSeats(peopleBus1);
+        int price2 = bus2.bookSeats(peopleBus2);
+        
+        if (price1 != -1) {
+            System.out.println("Свободные места в первом автобусе: " + bus1.availableSeats());
+            System.out.println("Цена за поездку для первой группы: " + price1 + " рублей");
+        } else {
+            System.out.println("Недостаточно мест в первом автобусе.");
+        }
+
+        if (price2 != -1) {
+            System.out.println("Свободные места во втором автобусе: " + bus2.availableSeats());
+            System.out.println("Цена за поездку для второй группы: " + price2 + " рублей");
+        } else {
+            System.out.println("Недостаточно мест во втором автобусе.");
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
