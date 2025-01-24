@@ -84,6 +84,123 @@ public class TouristBus {
     public int getOccupiedSeats() {
         return occupiedSeats;
     }
+
+    // Метод для вывода информации о автобусе
+    public void printInfo() {
+        System.out.println("Информация о туристическом автобусе:");
+        System.out.println("Количество мест: " + numberOfSeats);
+        System.out.println("Стоимость одного места: " + pricePerSeat);
+        System.out.println("Занятые места: " + occupiedSeats);
+        System.out.println("Свободные места: " + getAvailableSeats());
+        System.out.println("Автобус " + (isEmpty() ? "пуст" : "не пуст") + ".");
+        System.out.println("Автобус " + (isFull() ? "полон" : "не полон") + ".");
+        System.out.println("Общая стоимость занятых мест: " + calculateTotalOccupiedCost());
+    }
+
+    // Пример использования класса
+    public static void main(String[] args) {
+        TouristBus bus = new TouristBus();
+        bus.printInfo();
+
+        bus.bookSeats(10);
+        bus.printInfo();
+
+        bus.bookSeats(45);  // Попытка забронировать больше мест, чем доступно
+        bus.printInfo();
+    }
+}
+
+
+
+
+
+
+public class TouristBus {
+    private int numberOfSeats;          // Количество мест
+    private double pricePerSeat;        // Стоимость одного места
+    private int occupiedSeats;          // Количество занятых мест
+
+    // Конструктор по умолчанию
+    public TouristBus() {
+        this.numberOfSeats = 50;       // Предполагаем 50 мест по умолчанию
+        this.pricePerSeat = 100.0;     // Предполагаем стоимость 100
+        this.occupiedSeats = 0;         // Изначально автобус пуст
+    }
+
+    // Конструктор с параметрами
+    public TouristBus(int numberOfSeats, double pricePerSeat) {
+        if (numberOfSeats <= 0 || pricePerSeat < 0) {
+            throw new IllegalArgumentException("Количество мест должно быть положительным, а цена - ненегативной.");
+        }
+        this.numberOfSeats = numberOfSeats;
+        this.pricePerSeat = pricePerSeat;
+        this.occupiedSeats = 0;         // Изначально автобус пуст
+    }
+
+    // Конструктор копирования
+    public TouristBus(TouristBus bus) {
+        this.numberOfSeats = bus.numberOfSeats;
+        this.pricePerSeat = bus.pricePerSeat;
+        this.occupiedSeats = bus.occupiedSeats;
+    }
+
+    // Метод для изменения количества занятых мест
+    public void bookSeats(int seats) {
+        if (seats <= 0) {
+            throw new IllegalArgumentException("Количество бронируемых мест должно быть положительным.");
+        }
+        if (occupiedSeats + seats <= numberOfSeats) {
+            occupiedSeats += seats;
+        } else {
+            System.out.println("Недостаточно свободных мест.");
+        }
+    }
+
+    // Метод для получения количества свободных мест
+    public int getAvailableSeats() {
+        return numberOfSeats - occupiedSeats;
+    }
+
+    // Метод для проверки, пуст автобус или заполнен
+    public boolean isEmpty() {
+        return occupiedSeats == 0;
+    }
+
+    public boolean isFull() {
+        return occupiedSeats == numberOfSeats;
+    }
+
+    // Метод для расчета общей стоимости занятых мест
+    public double calculateTotalOccupiedCost() {
+        return occupiedSeats * pricePerSeat;
+    }
+
+    // Геттеры и сеттеры
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        if (numberOfSeats <= 0) {
+            throw new IllegalArgumentException("Количество мест должно быть положительным.");
+        }
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public double getPricePerSeat() {
+        return pricePerSeat;
+    }
+
+    public void setPricePerSeat(double pricePerSeat) {
+        if (pricePerSeat < 0) {
+            throw new IllegalArgumentException("Цена не может быть отрицательной.");
+        }
+        this.pricePerSeat = pricePerSeat;
+    }
+
+    public int getOccupiedSeats() {
+        return occupiedSeats;
+    }
 }
 
 
