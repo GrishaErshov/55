@@ -1,3 +1,42 @@
+import java.util.Scanner;
+
+public class TouristBusDemo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Create two TouristBus objects
+        TouristBus bus1 = new TouristBus(50, 500); // 50 seats, price 500
+        TouristBus bus2 = new TouristBus(50, 600); // 50 seats, price 600
+
+        // Input number of people for the first bus
+        System.out.print("Enter the number of people for the first bus: ");
+        int peopleBus1 = scanner.nextInt();
+        bus1.bookSeats(peopleBus1);
+
+        // Input number of people for the second bus
+        System.out.print("Enter the number of people for the second bus: ");
+        int peopleBus2 = scanner.nextInt();
+        bus2.bookSeats(peopleBus2);
+
+        // Output information for the first bus
+        System.out.println("\nFirst Bus:");
+        System.out.println("Available seats: " + bus1.getAvailableSeats());
+        System.out.println("Total cost for the group of " + peopleBus1 + " people: " + bus1.calculateTotalOccupiedCost());
+
+        // Output information for the second bus
+        System.out.println("\nSecond Bus:");
+        System.out.println("Available seats: " + bus2.getAvailableSeats());
+        System.out.println("Total cost for the group of " + peopleBus2 + " people: " + bus2.calculateTotalOccupiedCost());
+
+        scanner.close();
+    }
+}
+
+
+
+
+
+
 public class TouristBus {
     private int numberOfSeats;          // Количество мест
     private double pricePerSeat;        // Стоимость одного места
