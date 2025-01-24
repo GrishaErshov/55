@@ -1,54 +1,90 @@
-class TouristBus:
-    def __init__(self, capacity, price_per_seat):
-        self.capacity = capacity
-        self.available_seats = capacity
-        self.price_per_seat = price_per_seat
+public class TouristBus {
+    private int numberOfSeats;          // Количество мест
+    private double pricePerSeat;        // Стоимость одного места
+    private int occupiedSeats;          // Количество занятых мест
 
-    def book_seats(self, num_people):
-        if num_people <= self.available_seats:
-            self.available_seats -= num_people
-            return True
-        else:
-            print(f"Недостаточно мест в автобусе. Доступно: {self.available_seats} мест.")
-            return False
+    // Конструктор по умолчанию
+    public TouristBus() {
+        this.numberOfSeats = 50;       // Предполагаем 50 мест по умолчанию
+        this.pricePerSeat = 100.0;     // Предполагаем стоимость 100
+        this.occupiedSeats = 0;         // Изначально автобус пуст
+    }
 
-    def calculate_trip_cost(self, num_people):
-         if num_people <= self.capacity - self.available_seats:
-            return num_people * self.price_per_seat
-         else:
-             return 0 # возвращаем 0, если мест в автобусе меньше, чем требуется
+    // Конструктор с параметрами
+    public TouristBus(int numberOfSeats, double pricePerSeat) {
+        if (numberOfSeats <= 0 || pricePerSeat < 0) {
+            throw new IllegalArgumentException("Количество мест должно быть положительным, а цена - ненегативной.");
+        }
+        this.numberOfSeats = numberOfSeats;
+        this.pricePerSeat = pricePerSeat;
+        this.occupiedSeats = 0;         // Изначально автобус пуст
+    }
 
-# Создаем два объекта "Туристический автобус"
-bus1 = TouristBus(50, 500)  # 50 мест, цена за место 500
-bus2 = TouristBus(40, 600)  # 40 мест, цена за место 600
+    // Конструктор копирования
+    public TouristBus(TouristBus bus) {
+        this.numberOfSeats = bus.numberOfSeats;
+        this.pricePerSeat = bus.pricePerSeat;
+        this.occupiedSeats = bus.occupiedSeats;
+    }
 
-# Запрос кол-ва людей для каждого автобуса
-try:
-    num_people_bus1 = int(input("Введите количество людей для первого автобуса: "))
-    num_people_bus2 = int(input("Введите количество людей для второго автобуса: "))
-except ValueError:
-    print("Ошибка: Введите целое число.")
-    exit()
+    // Метод для изменения количества занятых мест
+    public void bookSeats(int seats) {
+        if (seats <= 0) {
+            throw new IllegalArgumentException("Количество бронируемых мест должно быть положительным.");
+        }
+        if (occupiedSeats + seats <= numberOfSeats) {
+            occupiedSeats += seats;
+        } else {
+            System.out.println("Недостаточно свободных мест.");
+        }
+    }
 
-# Бронирование мест
-bus1_booked = bus1.book_seats(num_people_bus1)
-bus2_booked = bus2.book_seats(num_people_bus2)
+    // Метод для получения количества свободных мест
+    public int getAvailableSeats() {
+        return numberOfSeats - occupiedSeats;
+    }
 
+    // Метод для проверки, пуст автобус или заполнен
+    public boolean isEmpty() {
+        return occupiedSeats == 0;
+    }
 
-# Вывод информации
+    public boolean isFull() {
+        return occupiedSeats == numberOfSeats;
+    }
 
-if bus1_booked:
-    trip_cost_bus1 = bus1.calculate_trip_cost(num_people_bus1)
-    print(f"\nПервый автобус:")
-    print(f"Осталось свободных мест: {bus1.available_seats}")
-    print(f"Стоимость поездки: {trip_cost_bus1} руб.")
+    // Метод для расчета общей стоимости занятых мест
+    public double calculateTotalOccupiedCost() {
+        return occupiedSeats * pricePerSeat;
+    }
 
-if bus2_booked:
-    trip_cost_bus2 = bus2.calculate_trip_cost(num_people_bus2)
-    print(f"\nВторой автобус:")
-    print(f"Осталось свободных мест: {bus2.available_seats}")
-    print(f"Стоимость поездки: {trip_cost_bus2} руб.")
+    // Геттеры и сеттеры
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
 
+    public void setNumberOfSeats(int numberOfSeats) {
+        if (numberOfSeats <= 0) {
+            throw new IllegalArgumentException("Количество мест должно быть положительным.");
+        }
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public double getPricePerSeat() {
+        return pricePerSeat;
+    }
+
+    public void setPricePerSeat(double pricePerSeat) {
+        if (pricePerSeat < 0) {
+            throw new IllegalArgumentException("Цена не может быть отрицательной.");
+        }
+        this.pricePerSeat = pricePerSeat;
+    }
+
+    public int getOccupiedSeats() {
+        return occupiedSeats;
+    }
+}
 
 
 
