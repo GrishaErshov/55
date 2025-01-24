@@ -1,36 +1,78 @@
 import java.util.Scanner;
 
-public class TouristBusDemo {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+class Bus {
+    private int totalSeats;      // Общее количество мест
+    private int occupiedSeats;   // Занятые места
+    private int pricePerSeat;    // Цена за место
 
-        // Create two TouristBus objects
-        TouristBus bus1 = new TouristBus(50, 500); // 50 seats, price 500
-        TouristBus bus2 = new TouristBus(50, 600); // 50 seats, price 600
+    // Конструктор класса Bus
+    public Bus(int totalSeats, int pricePerSeat) {
+        this.totalSeats = totalSeats;
+        this.pricePerSeat = pricePerSeat;
+        this.occupiedSeats = 0;   // Изначально все места свободны
+    }
 
-        // Input number of people for the first bus
-        System.out.print("Enter the number of people for the first bus: ");
-        int peopleBus1 = scanner.nextInt();
-        bus1.bookSeats(peopleBus1);
+    // Метод для бронирования мест
+    public int bookSeats(int numberOfPeople) {
+        if (numberOfPeople <= availableSeats()) {
+            occupiedSeats += numberOfPeople; // Увеличиваем занятые места
+            return priceForGroup(numberOfPeople); // Возвращаем общую цену
+        } else {
+            return -1; // Не удалось забронировать места
+        }
+    }
 
-        // Input number of people for the second bus
-        System.out.print("Enter the number of people for the second bus: ");
-        int peopleBus2 = scanner.nextInt();
-        bus2.bookSeats(peopleBus2);
+    // Метод для получения доступного количества мест
+    public int availableSeats() {
+        return totalSeats - occupiedSeats; // Возвращаем количество свободных мест
+    }
 
-        // Output information for the first bus
-        System.out.println("\nFirst Bus:");
-        System.out.println("Available seats: " + bus1.getAvailableSeats());
-        System.out.println("Total cost for the group of " + peopleBus1 + " people: " + bus1.calculateTotalOccupiedCost());
-
-        // Output information for the second bus
-        System.out.println("\nSecond Bus:");
-        System.out.println("Available seats: " + bus2.getAvailableSeats());
-        System.out.println("Total cost for the group of " + peopleBus2 + " people: " + bus2.calculateTotalOccupiedCost());
-
-        scanner.close();
+    // Метод для вычисления цены для группы
+    public int priceForGroup(int numberOfPeople) {
+        return numberOfPeople * pricePerSeat; // Общая стоимость
     }
 }
+
+public class TouristBusApp {
+    public static void main(String[] args) {
+        // Создаем два объекта «Туристический автобус»
+        Bus bus1 = new Bus(50, 500); // 50 мест, 500 за место
+        Bus bus2 = new Bus(50, 600); // 50 мест, 600 за место
+
+        Scanner scanner = new Scanner(System.in); // Объект для ввода данных
+
+        // Ввод количества людей для первого автобуса
+        System.out.print("Введите количество людей для первого автобуса: ");
+        int peopleBus1 = scanner.nextInt();
+
+        // Ввод количества людей для второго автобуса
+        System.out.print("Введите количество людей для второго автобуса: ");
+        int peopleBus2 = scanner.nextInt();
+
+        // Бронирование мест и получение стоимости
+        int price1 = bus1.bookSeats(peopleBus1);
+        int price2 = bus2.bookSeats(peopleBus2);
+
+        // Вывод информации о первом автобусе
+        if (price1 != -1) {
+            System.out.println("Свободные места в первом автобусе: " + bus1.availableSeats());
+            System.out.println("Цена за поездку для первой группы: " + price1 + " рублей");
+        } else {
+            System.out.println("Недостаточно мест в первом автобусе.");
+        }
+
+        // Вывод информации о втором автобусе
+        if (price2 != -1) {
+            System.out.println("Свободные места во втором автобусе: " + bus2.availableSeats());
+            System.out.println("Цена за поездку для второй группы: " + price2 + " рублей");
+        } else {
+            System.out.println("Недостаточно мест во втором автобусе.");
+        }
+
+        scanner.close(); // Закрываем сканнер
+    }
+}
+        
 
 
 
