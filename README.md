@@ -1,3 +1,252 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class CheckersGame {
+
+    // Constants
+    private static final int BOARD_SIZE = 8;
+    private static final String FILE_NAME = "checkers_game.txt";
+
+    // Game state
+    private char[][] board;
+    private List<String> moves;
+    private int currentPlayer; // 1 - red, 2 - black
+    private boolean gameInProgress;
+
+    public CheckersGame() {
+        board = new char[BOARD_SIZE][BOARD_SIZE];
+        moves = new ArrayList<>();
+        currentPlayer = 1; // Red starts
+        gameInProgress = false;
+        loadGame(); // Load the game state from file
+    }
+
+    // Initialization & Loading
+
+    private void initializeBoard() {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if ((row + col) % 2 != 0) { // Only set pieces on dark squares
+                    if (row < 3) {
+                        board[row][col] = 'r'; // Red
+                    } else if (row > 4) {
+                        board[row][col] = 'b'; // Black
+                    } else {
+                        board[row][col] = ' '; // Empty
+                    }
+                } else {
+                    board[row][col] = ' '; // Empty
+                }
+            }
+        }
+    }
+
+    private void loadGame() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            List<String> lines = new ArrayList<>();
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+
+            if (lines.isEmpty()) {
+                initializeBoard();
+                return; // Start a new game
+            }
+
+            // Load board state (assuming it's the first part of the file)
+            if (lines.size() >= BOARD_SIZE) {
+                for (int row = 0; row < BOARD_SIZE; row++) {
+                    if(lines.get(row).length() != BOARD_SIZE) {
+                        System.out.println("Warning: corrupted board state in file. Starting new game.");
+                        initializeBoard();
+                        return;
+                    }
+                    for (int col = 0; col < BOARD_SIZE; col++) {
+                        board[row][col] = lines.get(row).charAt(col);
+                    }
+                }
+            } else {
+                 System.out.println("Warning: corrupted board state in file. Starting new game.");
+                 initializeBoard();
+                 return;
+            }
+
+
+            // Load moves
+            for (int i = BOARD_SIZE; i < lines.size(); i++) {
+                 moves.add(lines.get(i));
+            }
+
+            //Determine the current player based on the number of moves.
+            currentPlayer = (moves.size() % 2 == 0) ? 1 : 2;
+            gameInProgress = true;
+            System.out.println("Game loaded from file.");
+            printBoard();
+
+
+        } catch (IOException e) {
+            initializeBoard();
+            System.out.println("No saved game found. Starting a new game.");
+        }
+    }
+
+    // Gameplay Methods
+
+    public void startGame() {
+        Scanner scanner = new Scanner(System.in);
+        if(!gameInProgress){
+            initializeBoard();
+        }
+
+        while (true) {
+            printBoard();
+            System.out.println("Player " + currentPlayer + ", enter your move (e.g., a1-b2 or a1xb3 for capture) or 'quit':");
+            String move = scanner.nextLine().trim().toLowerCase();
+
+            if ("quit".equals(move)) {
+                saveGame();
+                System.out.println("Game saved. Exiting.");
+                break;
+            }
+
+            if (isValidMove(move)) {
+                executeMove(move);
+                moves.add(move);
+                saveGame();
+                if (checkWin()) {
+                    printBoard();
+                    System.out.println("Player " + currentPlayer + " wins!");
+                    break;
+                }
+                currentPlayer = (currentPlayer == 1) ? 2 : 1;
+            } else {
+                System.out.println("Invalid move. Try again.");
+            }
+        }
+        scanner.close();
+    }
+
+    private boolean isValidMove(String move) {
+        if (move.length() < 5) {
+            return false; // Minimum length is a1-b2 or a1xb3
+        }
+
+        // Simple validation for format
+        if (!move.matches("^[a-h][1-8][-x][a-h][1-8]$")) {
+            return false;
+        }
+        return true;
+    }
+
+    private void executeMove(String move) {
+        // Convert move to coordinates
+        int startRow = BOARD_SIZE - Character.getNumericValue(move.charAt(1));
+        int startCol = move.charAt(0) - 'a';
+        int endRow = BOARD_SIZE - Character.getNumericValue(move.charAt(4));
+        int endCol = move.charAt(3) - 'a';
+
+        char piece = board[startRow][startCol];
+        char targetPiece = board[endRow][endCol];
+
+
+        if (targetPiece != ' ') {
+            System.out.println("Invalid move: Target square is not empty");
+            return;
+        }
+
+        // Check if the piece belongs to the current player.
+        if ((currentPlayer == 1 && Character.toLowerCase(piece) != 'r') ||
+            (currentPlayer == 2 && Character.toLowerCase(piece) != 'b')) {
+                System.out.println("Invalid move: You are trying to move the opponent's piece.");
+                return;
+        }
+
+        // Basic move execution (without checking for captures or promotion)
+        board[startRow][startCol] = ' ';
+        board[endRow][endCol] = piece;
+
+        //Check for captures (simple implementation - need to improve for multiple captures)
+        if(move.charAt(2) == 'x'){
+            int capturedRow = (startRow + endRow) / 2;
+            int capturedCol = (startCol + endCol) / 2;
+            board[capturedRow][capturedCol] = ' ';
+        }
+    }
+
+    private boolean checkWin() {
+        boolean redPieces = false;
+        boolean blackPieces = false;
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (board[row][col] == 'r') {
+                    redPieces = true;
+                }
+                if (board[row][col] == 'b') {
+                    blackPieces = true;
+                }
+            }
+        }
+
+        if (!redPieces) return true; // Black wins
+        if (!blackPieces) return true; // Red wins
+        return false; // No winner yet
+    }
+
+    // File Saving
+
+    private void saveGame() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            // Save board state
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                writer.write(new String(board[row])); // Write each row as a string
+                writer.newLine();
+            }
+
+            // Save moves
+            for (String move : moves) {
+                writer.write(move);
+                writer.newLine();
+            }
+            System.out.println("Game saved.");
+        } catch (IOException e) {
+            System.err.println("Error saving the game: " + e.getMessage());
+        }
+    }
+
+    // Display
+
+    private void printBoard() {
+        System.out.println("  a b c d e f g h");
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            System.out.print((BOARD_SIZE - row) + " ");
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                System.out.print(board[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        CheckersGame game = new CheckersGame();
+        game.startGame();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+ккк
 import java.util.Scanner;
 
 class Bus {
