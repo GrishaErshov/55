@@ -1,3 +1,132 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+
+public class StudentManagement {
+
+    public static void main(String[] args) {
+
+        // 1. Create a list with 10 students
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(new Student(1, "Alice", "Smith", 20, 4.5));
+        studentList.add(new Student(2, "Bob", "Johnson", 22, 3.8));
+        studentList.add(new Student(3, "Charlie", "Brown", 21, 4.0));
+        studentList.add(new Student(4, "David", "Lee", 19, 4.8));
+        studentList.add(new Student(5, "Eve", "Wilson", 23, 3.5));
+        studentList.add(new Student(6, "Fiona", "Garcia", 20, 4.2));
+        studentList.add(new Student(7, "George", "Rodriguez", 22, 3.9));
+        studentList.add(new Student(8, "Hannah", "Martinez", 21, 4.6));
+        studentList.add(new Student(9, "Ivan", "Anderson", 19, 4.9));
+        studentList.add(new Student(10, "Jack", "Thomas", 23, 3.7));
+
+        // Print the original list
+        System.out.println("Original Student List:");
+        printStudentList(studentList);
+
+        // 2. Sort the list by average grade
+        Collections.sort(studentList, Comparator.comparingDouble(Student::getAverageGrade));
+        System.out.println("\nSorted Student List by Average Grade:");
+        printStudentList(studentList);
+
+
+        // 3. Remove students with average grade less than a given value
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter the minimum average grade to keep: ");
+        double minAverageGrade = scanner.nextDouble();
+
+        studentList.removeIf(student -> student.getAverageGrade() < minAverageGrade);
+
+        System.out.println("\nStudent List after removing students with average grade less than " + minAverageGrade + ":");
+        printStudentList(studentList);
+        scanner.close();
+    }
+
+    private static void printStudentList(List<Student> studentList) {
+        for (Student student : studentList) {
+            System.out.println(student); // Assuming Student class has a proper toString() method
+        }
+    }
+}
+
+class Student {
+    private int id;
+    private String name;
+    private String lastName;
+    private int age;
+    private double averageGrade;
+
+    public Student(int id, String name, String lastName, int age, double averageGrade) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.averageGrade = averageGrade;
+    }
+
+    // Getters and setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public void setAverageGrade(double averageGrade) {
+        this.averageGrade = averageGrade;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", averageGrade=" + averageGrade +
+                '}';
+    }
+}
+
+
+
+
+
+
+
+
+
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
