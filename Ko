@@ -1,3 +1,37 @@
+class Program
+{
+    private static double F(double x)
+    {
+        return x-Math.Sin(x)/2 - 1.0;
+    }
+    private static double Newton(double x0, double eps, double dx)
+    {
+        double x1 = x0;
+        double dif = Math.Round(F(x1) / F(x1 + dx), 5);
+        double alpha = -1.0 / dif;
+        do
+        {
+          x0 = x1;
+          x1 += Math.Round(alpha * F(x0), 4);
+        } while (Math.Abs(x1 - x0) > eps);
+        return x1;
+    }
+    public static void Main()
+    {
+        const double eps = 0.00001;  // точность расчета
+        const double dx = 0.1;    // шаг
+        double x0 = 0.0;         //  начальная точка
+        Console.WriteLine(Newton(x0, eps, dx));
+        Console.ReadKey();
+     }
+}
+
+
+
+
+
+
+
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
